@@ -24,13 +24,23 @@ server.listen(8181, () => console.log('Server is running on port 8181'));
 
 // 소켓 이벤트 처리
 io.on('connection', (socket: Socket) => {
+  console.log(`클라이언트 연결됨: ${socket.id}`);
+
   socket.on('room:create', (userName: string, ackFunction: (roomKey: string) => void) => {
     const roomKey = SocketHandlers.createRoom(socket, userName);
     ackFunction(roomKey);
   });
 
-  socket.on('room:join', (roomKey: string, userName: string) => {
-    SocketHandlers.joinRoom(socket, roomKey, userName);
+  socket.on(
+    'room:join',
+    (roomKey: string, userName: string, ackFunction: (response: string) => void) => {
+      const success = SocketHandlers.joinRoom(socket, roomKey, userName);
+      ackFunction(success ? 'success' : 'failure');
+    },
+  );
+
+  socket.on('room:leave', (roomKey: string) => {
+    SocketHandlers.leaveRoom(socket, roomKey, io);
   });
 
   socket.on('signal:offer', (roomKey: string, data: Types.SignalData) => {
@@ -55,8 +65,7 @@ io.on('connection', (socket: Socket) => {
   });
 
   socket.on('disconnect', () => {
-    Object.keys(SocketHandlers.rooms).forEach((roomKey) => {
-      SocketHandlers.removeSocketFromRoom(socket.id, roomKey, io);
-    });
+    console.log(`클라이언트 연결 해제됨: ${socket.id}`);
+    SocketHandlers.handleDisconnect(socket, io);
   });
 });
