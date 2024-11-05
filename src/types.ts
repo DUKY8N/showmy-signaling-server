@@ -11,3 +11,9 @@ export interface SignalData {
   content: string;
   to: string;
 }
+
+export interface TrackInfoData {
+  to: string;
+  trackId: string;
+  mediaType: string;
+}

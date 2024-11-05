@@ -103,3 +103,18 @@ export const handleIceCandidate = (
     content,
   });
 };
+
+export const handleTrackInfo = (
+  socket: Socket,
+  roomKey: string,
+  data: Types.TrackInfoData,
+): void => {
+  const { to, trackId, mediaType } = data;
+  socket.to(to).emit('signal:trackInfo', {
+    senderSocketId: socket.id,
+    content: {
+      trackId,
+      mediaType,
+    },
+  });
+};
