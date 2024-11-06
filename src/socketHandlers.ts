@@ -118,3 +118,15 @@ export const handleTrackInfo = (
     },
   });
 };
+
+export const handleRemoveTrack = (
+  socket: Socket,
+  roomKey: string,
+  data: { to: string; mediaType: string },
+): void => {
+  const { to, mediaType } = data;
+  socket.to(to).emit('signal:removeTrack', {
+    senderSocketId: socket.id,
+    content: { mediaType },
+  });
+};

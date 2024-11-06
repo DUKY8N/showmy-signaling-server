@@ -68,6 +68,10 @@ io.on('connection', (socket: Socket) => {
     SocketHandlers.handleTrackInfo(socket, roomKey, data);
   });
 
+  socket.on('signal:removeTrack', (roomKey: string, data: { to: string; mediaType: string }) => {
+    SocketHandlers.handleRemoveTrack(socket, roomKey, data);
+  });
+
   socket.on('disconnect', () => {
     console.log(`클라이언트 연결 해제됨: ${socket.id}`);
     SocketHandlers.handleDisconnect(socket, io);
