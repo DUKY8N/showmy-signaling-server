@@ -130,3 +130,13 @@ export const handleRemoveTrack = (
     content: { mediaType },
   });
 };
+
+// 채팅 메시지 처리
+export const handleChatMessage = (
+  socket: Socket,
+  roomKey: string,
+  message: Types.ChatMessage,
+): void => {
+  // 같은 방의 다른 참가자들에게 메시지 브로드캐스트
+  socket.to(roomKey).emit('chat:receive', message);
+};

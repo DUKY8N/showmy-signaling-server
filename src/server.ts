@@ -72,6 +72,10 @@ io.on('connection', (socket: Socket) => {
     SocketHandlers.handleRemoveTrack(socket, roomKey, data);
   });
 
+  socket.on('chat:send', (roomKey: string, message: Types.ChatMessage) => {
+    SocketHandlers.handleChatMessage(socket, roomKey, message);
+  });
+
   socket.on('disconnect', () => {
     console.log(`클라이언트 연결 해제됨: ${socket.id}`);
     SocketHandlers.handleDisconnect(socket, io);

@@ -17,3 +17,10 @@ export interface TrackInfoData {
   trackId: string;
   mediaType: string;
 }
+
+export interface ChatMessage {
+  id: string;
+  sender: string;
+  content: string;
+  timestamp: number;
+}
